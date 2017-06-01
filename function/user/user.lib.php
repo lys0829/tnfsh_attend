@@ -180,15 +180,17 @@ function login_with_tnfsh_email(string $username, string $passwd)
     }
 
     fgets ($fp,128);
-    fwrite ($fp, "USER $username");
+    fwrite ($fp, "USER $username
+");
     fgets ($fp,512);
-    fwrite ($fp, "PASS $passwd");
+    fwrite ($fp, "PASS $passwd
+");
     if (!feof($fp)){
         if(substr(fgets($fp,128),0,14)=="+OK Logged in."){
             $resultdata[0] = true;
             $resultdata[1] = $userdata;
         }else{
-            $resultdata[1] = '密碼錯誤';
+            $resultdata[1] = 'mail密碼錯誤';
             return $resultdata;
         }
     }
