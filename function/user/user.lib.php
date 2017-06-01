@@ -158,6 +158,46 @@ function login(string $username, string $password)
     return $resultdata;
 }
 
+function login_with_tnfsh_email(string $username, string $passwd)
+{
+    $resultdata = [false, ''];
+    $acctable = \DB::tname('account');
+
+    $userdata = \DB::fetch("SELECT * FROM  `$acctable`".'WHERE  `username` = ?', [$username]);
+    if ($userdata === false) {
+        $resultdata[1] = '無此帳號';
+        return $resultdata;
+    }
+    if(!empty($userdata['passhash'])){
+        $resultdata[1] = 'not email';
+        return $resultdata;
+    }
+
+    $fp = @fsockopen ("mail.tnfsh.tn.edu.tw", 110, $errno, $errstr, 30);
+    if (!$fp) {
+        $resultdata[1] = '連接mail server失敗';
+        return $resultdata;
+    }
+
+    fgets ($fp,128);
+    fwrite ($fp, "USER $username");
+    fgets ($fp,512);
+    fwrite ($fp, "PASS $passwd");
+    if (!feof($fp)){
+        if(substr(fgets($fp,128),0,14)=="+OK Logged in."){
+            $resultdata[0] = true;
+            $resultdata[1] = $userdata;
+        }else{
+            $resultdata[1] = '密碼錯誤';
+            return $resultdata;
+        }
+    }
+    fputs ($fp, "QUIT");
+    fclose ($fp);
+
+    return $resultdata;
+}
+
 function page_ojacct($uid)
 {
     global $_E;

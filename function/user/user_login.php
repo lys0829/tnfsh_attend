@@ -13,8 +13,26 @@ function loginHandle()
     }
 
     $username = \TnfshAttend\safe_post('username');
+    $passwd = \TnfshAttend\safe_post('passwordreal');
     $AESenpass = \TnfshAttend\safe_post('password');
     $GB = \TnfshAttend\safe_post('GB');
+
+    if( isset($username,$passwd) ){
+        if (!\userControl::CheckToken('LOGIN')) {
+            \TnfshAttend\throwjson('error', 'token error, please refresh page');
+        }
+
+        \LOG::msg(\Level::Notice, "<$username> try use email login.");
+		$user = login_with_tnfsh_email($username,$passwd);
+        if(!$user[0]){
+            \LOG::msg(\Level::Notice, "<$username> want to login but fail.(".$user[1].')');
+            \TnfshAttend\throwjson('error',$user[1]);
+        }
+
+        $user = $user[1];
+        \userControl::SetLoginToken($user['uid']);
+        \TnfshAttend\throwjson('SUCC', 'index.php');
+    }
 
     if( isset($username,$AESenpass,$GB) ) {
         if (!\userControl::CheckToken('LOGIN')) {

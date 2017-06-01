@@ -31,6 +31,12 @@ $(document).ready(function()
     $("#loginform").submit(function(e)
     {
         e.preventDefault();
+
+        $("#display").html('...');
+        api_submit("<?=$TnfshAttend->uri('user','login')?>","#loginform","#display",function(res){
+            location.href = "<?=$_E['SITEROOT']?>"+res.data;
+        });
+
         B = BigNumber.random(40).mul(new BigNumber(10).pow(40)).ceil();
         GB = PowMod(PublicG,B,PublicPrime);
         GAB = PowMod(GA,B,PublicPrime);
@@ -76,7 +82,7 @@ $(document).ready(function()
                     
                     <div class="form-group">
                     <label for="password" style = "display: block" class="login_lable_text">密碼</label>
-                    <input type="password" class="textinput" id="passwordreal" placeholder="Password" required>
+                    <input type="password" class="textinput" id="passwordreal" name="passwordreal" placeholder="Password" required>
                     </div>
                     
                     <br>
