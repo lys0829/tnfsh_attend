@@ -1,0 +1,4 @@
+/config/config.php
+/LocalSetting.php
+/data/private/*.tmp
+tools.php
