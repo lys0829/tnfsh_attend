@@ -218,4 +218,199 @@ class userControl
         global $_E;
         return in_array($uid, $_E['site']['admin']);
     }
+
+    public static function in_group(int $uid,int $gid):bool
+    {
+        global $_E;
+        $ugname = \DB::tname('user_group');
+        $ugres = \DB::fetch("SELECT * FROM `{$ugname}` WHERE `uid`=? AND `gid`=?",[$uid,$gid]);
+
+        if($ugres === false){
+            return false;
+        }
+        return true;
+    }
+
+    public static function get_groupid_by_name(string $gname){
+        $ugname = \DB::tname('group_list');
+        $ugres = \DB::fetch("SELECT * FROM `{$ugname}` WHERE `gname`=?",[$gname]);
+
+        if($ugres === false){
+            return false;
+        }
+        else{
+            return $ugres['gid'];
+        }
+    }
+
+    public static function get_group_by_user(int $uid):array
+    {
+        global $_E;
+        $ugname = \DB::tname('user_group');
+        $ugres = \DB::fetchAll("SELECT * FROM `{$ugname}` WHERE `uid`=?",[$uid]);
+        $user_group = [];
+        foreach($ugres as $gr){
+            $user_group[] = $gr['gid'];
+        }
+        return $user_group;
+    }
+
+    public static function add_user_to_group(int $uid,int $gid):bool
+    {
+        global $_E;
+        if(self::in_group($uid,$gid)){
+            return true;
+        }
+
+        $ugname = \DB::tname('user_group');
+        $ugres = \DB::query("INSERT INTO `{$ugname}` (`uid`,`gid`) VALUES (?,?)",[$uid,$gid]);
+        if($ugres === false){
+            return false;
+        }
+        return true;
+    }
+
+    public static function delete_user_from_group(int $uid,int $gid):bool
+    {
+        global $_E;
+        if(!self::in_group($uid,$gid)){
+            return true;
+        }
+
+        $ugname = \DB::tname('user_group');
+        $ugres = \DB::query("DELETE FROM `{$ugname}` WHERE `uid` = ? AND `gid` = ?",[$uid,$gid]);
+        if($ugres === false){
+            return false;
+        }
+        return true;
+    }
+
+    public static function get_permission_by_name(string $name)
+    {
+        global $_E;
+        $pertname = \DB::tname('permission_list');
+        $perres = \DB::fetch("SELECT * FROM `{$pertname}` WHERE `name`=?",[$name]);
+        if($perres === false){
+            return false;
+        }
+        return $perres;
+    }
+
+    public static function has_permission(string $name,int $uid):bool
+    {
+        $permission = self::get_permission_by_name($name);
+        $user_group = self::get_group_by_user($uid);
+
+        if($permission === false){
+            return false;
+        }
+
+        $perid = $permission['pid'];
+
+        $pertname = \DB::tname('user_permission');
+        $perres = \DB::fetch("SELECT * FROM `{$pertname}` WHERE (`group_or_user`=? AND `gu`=? AND `pid`=?)",['user',$uid,$perid]);
+        if($perres !== false){
+            if($perres['allow_or_deny'] == 'allow'){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+
+        if(!empty($user_group)){
+            $user_group = $user_group[0];
+            $perres = \DB::fetch("SELECT * FROM `{$pertname}` WHERE (`group_or_user`=? AND `gu`=? AND `pid`=?)",['group',$user_group,$perid]);
+            if($perres !== false){
+                if($perres['allow_or_deny'] == 'allow'){
+                    return true;
+                }
+                else{
+                    return false;
+                }
+            }
+        }
+        
+        if($permission['default_policy'] == 'allow'){
+            return true;
+        }
+        else{
+            return false;
+        }
+    }
+
+    public static function change_permission_for_user(int $uid,string $pname,string $ad)
+    {
+        $permission = self::get_permission_by_name($pname);
+
+        if($permission === false){
+            return false;
+        }
+
+        $permission = $permission['pid'];
+
+        if($ad != 'allow' && $ad != 'deny'){
+            return false;
+        }
+
+        $pertname = \DB::tname('user_permission');
+        $perres = \DB::fetch("SELECT * FROM `{$pertname}` WHERE (`group_or_user`=? AND `gu`=? AND `pid`=?)",['user',$uid,$permission]);
+
+        if($perres !== false){
+            $res = \DB::query("UPDATE `{$pertname}` SET `allow_or_deny` = ? WHERE (`upid`=?)",[$ad,$perres['upid']]);
+            if($res !== false){
+                return true;
+            }
+            else{
+                //LOG::msg(Level::Error, '', $res);
+                return false;
+            }
+        }
+        else{
+            $res = \DB::query("INSERT INTO `{$pertname}` (`pid`,`gu`,`group_or_user`,`allow_or_deny`) VALUES (?,?,?,?)",[$permission,$uid,'user',$ad]);
+            if($res !== false){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
+
+    public static function change_permission_for_group(int $gid,string $pname,string $ad)
+    {
+        $permission = self::get_permission_by_name($pname);
+
+        if($permission === false){
+            return false;
+        }
+
+        $permission = $permission['pid'];
+
+        if($ad != 'allow' && $ad != 'deny'){
+            return false;
+        }
+
+        $pertname = \DB::tname('user_permission');
+        $perres = \DB::fetch("SELECT * FROM `{$pertname}` WHERE (`group_or_user`=? AND `gu`=? AND `pid`=?)",['group',$gid,$permission]);
+
+        if($perres !== false){
+            $res = \DB::query("UPDATE `{$pertname}` SET `allow_or_deny` = ? WHERE (`upid`=?)",[$ad,$perres['upid']]);
+            if($res !== false){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+        else{
+            $res = \DB::query("INSERT INTO `{$pertname}` (`pid`,`gu`,`group_or_user`,`allow_or_deny`) VALUES (?,?,?,?)",[$permission,$gid,'group',$ad]);
+            if($res !== false){
+                return true;
+            }
+            else{
+                return false;
+            }
+        }
+    }
 }

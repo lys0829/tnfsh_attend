@@ -141,7 +141,7 @@ function view_roll_book(sign_id){
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h4 class="modal-title" id="sign_delete_checklb" style="color:black">您即將點名</h4>
+                            <h4 class="modal-title" id="sign_delete_checklb" style="color:black">您即將刪除點名單</h4>
                         </div>
                         <div class="modal-body">
                             您即將刪除點名單，以下為點名單基本資料<br>

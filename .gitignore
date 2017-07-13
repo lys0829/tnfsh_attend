@@ -3,3 +3,4 @@
 /data/private/*.tmp
 tools.php
 .vscode
+/tools

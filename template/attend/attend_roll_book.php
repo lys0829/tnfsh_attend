@@ -89,6 +89,8 @@ function save(){
             <h3>班級:<?=$tmpl['class']?></h3><br>
             <h3>日期:<?=$tmpl['date']?></h3><br>
             <h3>時間:<?=$tmpl['course_name']?></h3>
+            <button type="button" class="btn btn-success" onClick="save();"><span class="glyphicon glyphicon-ok"></span>儲存</button>
+            <div id="roll_book_save_message"></div>
         </div>
         <div class="col-sm-10 col-md-10" id="main-page">
             <table class="table table-striped">
