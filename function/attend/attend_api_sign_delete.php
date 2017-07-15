@@ -12,6 +12,13 @@ function attend_api_sign_deleteHandle()
         $stname = \DB::tname('signed');
         $rbname = \DB::tname('roll_book');
 
+        $check_own = \DB::query("SELECT * FROM `{$stname}` WHERE `sign_id`=? AND `uid`=?",[$sign_id.$_G['uid']]);
+        if($check_own === false){
+            if(!\userControl::has_permission('modify_roll_book',$_G['uid'])){
+                \TnfshAttend\throwjson('error','Access denied');
+            }
+        }
+
         $check = \DB::query("DELETE FROM `{$stname}` WHERE `sign_id` = ?",[$sign_id]);
         $check_rb = \DB::query("DELETE FROM `{$rbname}` WHERE `sign_id` = ?",[$sign_id]);
         if($check === false){

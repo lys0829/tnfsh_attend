@@ -321,7 +321,7 @@ class userControl
 
     public static function has_permission(string $name,int $uid):bool
     {
-        $permission = self::get_permission_by_name($name);
+        $permission = self::get_permission($name);
         $user_group = self::get_group_by_user($uid);
 
         if($permission === false){

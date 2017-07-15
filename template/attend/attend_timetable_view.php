@@ -78,10 +78,12 @@ function view_roll_book(sign_id){
                                 $wday = $week[date("w",$tmpl['firstdate']+86400*$d)];
                                 $day.=' ('.$wday.')';
                                 ?>
+                                    <?php if(\userControl::has_permission('attend',$_G['uid'])):?>
                                     <button type="button" class="btn btn-primary sign" style="width:90px" onClick="sign_check('<?=$day?>','<?=$date?>',<?=$cid?>,'<?=$cname?>','<?=$tmpl['class']?>');">
                                         <span class="glyphicon glyphicon-pencil"></span>
                                         點名
                                     </button>
+                                    <?php endif;?>
                             <?php endif;?>
                         <?php elseif(!$tmpl['signed'][$cid][$d]['own']):?>
                             <button type="button" class="btn btn-default" onClick="view_roll_book('<?=$tmpl['signed'][$cid][$d]['sign_id']?>');">

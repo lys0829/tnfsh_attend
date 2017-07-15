@@ -75,8 +75,9 @@ $(document).ready(function()
                     <?php if (!$_G['uid']): ?>
                     <li><a href="<?=$TnfshAttend->uri('user','login')?>">LOGIN</a></li>
                     <?php else: ?>
-                        <?php if (userControl::isAdmin($_G['uid'])):?>
-                        <li><a href="#" id="admin-tab">Admin</a></li>
+                        <?php if (\userControl::has_permission('user_manage',$_G['uid'])):?>
+                        <li><a href="<?=$TnfshAttend->uri('admin','group_list')?>" id="group">群組</a></li>
+                        <li><a href="<?=$TnfshAttend->uri('admin','permission_list')?>" id="permission">權限</a></li>
                         <?php endif; ?>
                     <li><a href="<?=$TnfshAttend->uri('user','view',$_G['uid'])?>"><?php echo htmlspecialchars($_G['nickname']); ?></a></li>
                     <li><a href="<?=$TnfshAttend->uri('user','logout')?>">LOGOUT</a></li>

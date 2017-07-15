@@ -10,6 +10,9 @@ function admin_api_permission_manageHandle()
     $pid = \TnfshAttend\safe_post('pid');
     $ad = (string)\TnfshAttend\safe_post('allow_or_deny');
     $edit = (string)\TnfshAttend\safe_post('group_or_user');
+    if(!\userControl::has_permission('user_manage',$_G['uid'])){
+        \TnfshAttend\throwjson('error','Access denied');
+    }
 
     try{
         if($ad!='allow' && $ad!='deny'){

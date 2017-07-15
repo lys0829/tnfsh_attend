@@ -8,6 +8,9 @@ function group_listHandle(){
     global $_E,$_G;
 
     try{
+        if(!\userControl::has_permission('user_manage',$_G['uid'])){
+            throw new \Exception('Access denied');
+        }
         
         $gname = \DB::tname('group_list');
         $gres = \DB::fetchAll("SELECT * FROM `{$gname}`");

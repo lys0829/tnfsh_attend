@@ -10,6 +10,10 @@ function attend_api_signHandle()
     $course_id = \TnfshAttend\safe_post('sign_course_id');
     $classnum = \TnfshAttend\safe_post('sign_class');
 
+    if(!\userControl::has_permission('attend',$_G['uid'])){
+        \TnfshAttend\throwjson('error','Access denied');
+    }
+
     try{
         $stname = \DB::tname('signed');
         $rbname = \DB::tname('roll_book');

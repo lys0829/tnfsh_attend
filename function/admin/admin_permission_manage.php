@@ -12,6 +12,10 @@ function permission_manageHandle(){
     $policy = (string)\TnfshAttend\safe_get('policy');
 
     try{
+        if(!\userControl::has_permission('user_manage',$_G['uid'])){
+            throw new \Exception('Access denied');
+        }
+        
         if($policy != 'allow' && $policy != 'deny'){
             throw new \Exception('指定之修改政策無效');
         }

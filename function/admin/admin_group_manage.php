@@ -10,6 +10,10 @@ function group_manageHandle(){
     $gid = (int)\TnfshAttend\safe_get('gid');
 
     try{
+        if(!\userControl::has_permission('user_manage',$_G['uid'])){
+            throw new \Exception('Access denied');
+        }
+        
         $users = \userControl::get_group_users($gid);
 
         $alluser = [];

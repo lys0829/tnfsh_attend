@@ -8,6 +8,9 @@ function admin_api_group_manageHandle()
     global $_G,$_E;
     $data = \TnfshAttend\safe_post('guser',true);
     $gid = \TnfshAttend\safe_post('gid');
+    if(!\userControl::has_permission('user_manage',$_G['uid'])){
+        \TnfshAttend\throwjson('error','Access denied');
+    }
 
     try{
         $in_users = [];

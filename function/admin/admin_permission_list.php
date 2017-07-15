@@ -8,6 +8,9 @@ function permission_listHandle(){
     global $_E,$_G;
 
     try{
+        if(!\userControl::has_permission('user_manage',$_G['uid'])){
+            throw new \Exception('Access denied');
+        }
         
         $pname = \DB::tname('permission_list');
         $pres = \DB::fetchAll("SELECT * FROM `{$pname}`");
