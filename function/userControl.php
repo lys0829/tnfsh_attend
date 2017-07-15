@@ -243,6 +243,20 @@ class userControl
         }
     }
 
+    public static function get_group_users(int $gid):array
+    {
+        global $_E;
+        $ugname = \DB::tname('user_group');
+        $ugres = \DB::fetchAll("SELECT * FROM `{$ugname}` WHERE `gid`=?",[$gid]);
+
+        $users = [];
+        foreach($ugres as $u){
+            $users[] = $u['uid'];
+        }
+
+        return $users;
+    }
+
     public static function get_group_by_user(int $uid):array
     {
         global $_E;
@@ -285,15 +299,24 @@ class userControl
         return true;
     }
 
-    public static function get_permission_by_name(string $name)
+    public static function get_permission($p,$useid=false)
     {
         global $_E;
         $pertname = \DB::tname('permission_list');
-        $perres = \DB::fetch("SELECT * FROM `{$pertname}` WHERE `name`=?",[$name]);
-        if($perres === false){
-            return false;
+        if(!$useid){
+            $perres = \DB::fetch("SELECT * FROM `{$pertname}` WHERE `name`=?",[$p]);
+            if($perres === false){
+                return false;
+            }
+            return $perres;
         }
-        return $perres;
+        else{
+            $perres = \DB::fetch("SELECT * FROM `{$pertname}` WHERE `pid`=?",[$p]);
+            if($perres === false){
+                return false;
+            }
+            return $perres;
+        }
     }
 
     public static function has_permission(string $name,int $uid):bool
@@ -339,9 +362,9 @@ class userControl
         }
     }
 
-    public static function change_permission_for_user(int $uid,string $pname,string $ad)
+    public static function change_permission_for_user(int $uid,$p,string $ad,$useid=false)
     {
-        $permission = self::get_permission_by_name($pname);
+        $permission = self::get_permission($p,$useid);
 
         if($permission === false){
             return false;
@@ -377,9 +400,9 @@ class userControl
         }
     }
 
-    public static function change_permission_for_group(int $gid,string $pname,string $ad)
+    public static function change_permission_for_group(int $gid,$p,string $ad,$useid=false)
     {
-        $permission = self::get_permission_by_name($pname);
+        $permission = self::get_permission($p,$useid);
 
         if($permission === false){
             return false;
@@ -412,5 +435,31 @@ class userControl
                 return false;
             }
         }
+    }
+
+    public static function delete_permission_from_user($p,$uid,$useid)
+    {
+        global $_E;
+        $permission = self::get_permission($p,$useid);
+        $pertname = \DB::tname('user_permission');
+
+        $perres = \DB::fetch("DELETE FROM `{$pertname}` WHERE `group_or_user`='user' AND `pid`=? AND `gu`=?",[$permission['pid'],$uid]);
+        if($perres === false){
+            return false;
+        }
+        return $perres;
+    }
+
+    public static function delete_permission_from_group($p,$gid,$useid)
+    {
+        global $_E;
+        $permission = self::get_permission($p,$useid);
+        $pertname = \DB::tname('user_permission');
+
+        $perres = \DB::fetch("DELETE FROM `{$pertname}` WHERE `group_or_user`='group' AND `pid`=? AND `gu`=?",[$permission['pid'],$gid]);
+        if($perres === false){
+            return false;
+        }
+        return $perres;
     }
 }

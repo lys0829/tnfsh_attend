@@ -7,6 +7,7 @@ $TnfshAttend->RegisterHandle('index','\\TnfshAttend\\Index',null,true);
 //$TnfshAttend->RegisterHandle('admin','\\TnfshAttend\\Admin\\AdminHandle',$_E['ROOT'].'/admin.php');
 $TnfshAttend->RegisterHandle('user','\\TnfshAttend\\User\\UserHandle',$_E['ROOT'].'/user.php');
 $TnfshAttend->RegisterHandle('attend','\\TnfshAttend\\Attend\\AttendHandle',$_E['ROOT'].'/attend.php');
+$TnfshAttend->RegisterHandle('admin','\\TnfshAttend\\Admin\\AdminHandle',$_E['ROOT'].'/admin.php');
 $TnfshAttend->run();
 function Index(){
     global $TnfshAttend;
