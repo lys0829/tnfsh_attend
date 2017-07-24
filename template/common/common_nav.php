@@ -70,6 +70,7 @@ $(document).ready(function()
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="<?=$TnfshAttend->uri('attend','timetable')?>">點名</a></li>
+                    <li><a href="<?=$TnfshAttend->uri('attend','output')?>">匯出點名單</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <?php if (!$_G['uid']): ?>

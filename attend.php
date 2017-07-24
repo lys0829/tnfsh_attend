@@ -20,6 +20,8 @@ function AttendHandle()
             break;
         case 'roll_book':
             break;
+        case 'output':
+            break;
 
         default:
             \Render::render('nonedefined');

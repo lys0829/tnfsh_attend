@@ -15,22 +15,18 @@ function remove_people(arr) {
     }
     return arr;
 }
-
 var skip,late,early;
 skip = JSON.parse("<?=$tmpl['skip_json']?>");
 late = JSON.parse("<?=$tmpl['late_json']?>");
 early = JSON.parse("<?=$tmpl['early_json']?>");
-
 function update_state(sid,state){
     remove_people(skip,sid);
     remove_people(late,sid);
     remove_people(early,sid);
     s = "#"+sid+"_";
-
     /*$(s+"late").removeAttr("disabled");
     $(s+"skip").removeAttr("disabled");
     $(s+"attend").removeAttr("disabled");*/
-
     //state:0=attend,1=late,2=skip;
     if(state!=0){
         if(state==1){
@@ -66,17 +62,14 @@ function update_state(sid,state){
         $(s+"early").removeClass("btn-info");
     }
 }
-
 function save(){
     skip = JSON.stringify(skip);
     late = JSON.stringify(late);
     early = JSON.stringify(early);
-
     $("#roll_book_save_late").val(late);
     $("#roll_book_save_skip").val(skip);
     $("#roll_book_save_early").val(early);
     $("#roll_book_save_signid").val(<?=$tmpl["sign_id"]?>);
-
     api_submit('<?=$TnfshAttend->uri('attend','api','roll_book_save')?>',"#roll_book_save","#roll_book_save_message",function(res){
         location.assign("<?=$TnfshAttend->uri('attend','roll_book')?>"+"?sign_id="+"<?=$tmpl["sign_id"]?>");
     });
