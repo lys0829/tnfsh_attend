@@ -6,12 +6,16 @@ if (!defined('IN_TnfshAttendSYSTEM')) {
 
 function outputHandle()
 {
-    global $_E;
+    global $_E,$_G;
     
     $begin = \TnfshAttend\safe_get('begin');
     $end = \TnfshAttend\safe_get('end');
 
     try{
+        if(!\userControl::has_permission("output",$_G['uid'])){
+            throw new \Exception('您不具有權限');
+        }
+
         if(empty($begin)||empty($end)){
             $_E['template']['has_data'] = false;
         }
