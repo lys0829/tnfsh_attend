@@ -5,13 +5,13 @@ if (!defined('IN_TEMPLATE')) {
 ?>
 <script>
 	var CONT;
-	var old = 'dashboard';
+	var old = "<?=$tmpl['old']?>";
     
 	$(document).ready(function(){
 	    CONT = document.getElementById('content');
 	    //$( "[navpage]" ).click(function(){loadTemplate($(this).attr('navpage'));});
         $("[navpage='"+old+"']").addClass('active');
-        loadTemplate(old);
+        loadTemplate('timetable_view?class='+old,old);
         
 	});
     
@@ -27,15 +27,16 @@ if (!defined('IN_TEMPLATE')) {
         {
             console.log('submit');
             search_class = this.value;
-            if(search_class!='')loadTemplate('timetable_view?class='+search_class);
+            if(search_class!='')loadTemplate('timetable_view?class='+search_class,search_class);
         });
     });
 
-	function loadTemplate(template){
+	function loadTemplate(template,search_class){
         console.log('load'+template);
         $("[navpage='"+old+"']").removeClass();
         $("[navpage='"+template+"']").addClass('active');
         old = template;
+        $("#class_select").val(search_class);
         loadTemplateToBlock(template,'main-page');
         return ;
 	}
@@ -49,6 +50,7 @@ if (!defined('IN_TEMPLATE')) {
         {
             adder = '&';
         }
+        
 	    $(content).load("<?=$TnfshAttend->uri('attend','timetable_view')?>/"+template,{subpage:'yes'},function(){
             $(content).hide();
             $(content).fadeIn();

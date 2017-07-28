@@ -8,6 +8,12 @@ function timetableHandle()
 {
     global $_E;
     
+    $old = \TnfshAttend\safe_get('old');
+
+    if(empty($old)){
+        $old = "dashboard";
+    }
+
     $class_list = [];
     $clname = \DB::tname('class');
     $res = \DB::fetchAll("SELECT `class` FROM `{$clname}`",[]);
@@ -16,6 +22,7 @@ function timetableHandle()
     }
 
     $_E['template']['clist'] = $class_list;
+    $_E['template']['old'] = $old;
 
     //\Render::renderSingleTemplate('attend_timetable', 'attend');
     \Render::render('attend_timetable', 'attend');
