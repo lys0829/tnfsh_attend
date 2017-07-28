@@ -84,6 +84,7 @@ function save(){
             <h3>時間:<?=$tmpl['course_name']?></h3>
             <?php if(\userControl::has_permission('modify_roll_book_limit',$_G['uid']) || \userControl::has_permission('modify_roll_book',$_G['uid'])):?>
             <button type="button" class="btn btn-success" onClick="save();"><span class="glyphicon glyphicon-ok"></span>儲存</button>
+            <a class="" href="<?=$TnfshAttend->uri('attend','timetable')?>?old=<?=$tmpl['class']?>"><span class="glyphicon glyphicon-arrow-left"></span></a>
             <?php endif;?>
             <div id="roll_book_save_message"></div>
         </div>
