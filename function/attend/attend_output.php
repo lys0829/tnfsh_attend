@@ -10,6 +10,7 @@ function outputHandle()
     
     $begin = \TnfshAttend\safe_get('begin');
     $end = \TnfshAttend\safe_get('end');
+    $class = \TnfshAttend\safe_get('class');
 
     try{
         if(!\userControl::has_permission("output",$_G['uid'])){
@@ -24,7 +25,12 @@ function outputHandle()
             $csv = "";
 
             $signtname = \DB::tname("signed");
-            $signres = \DB::fetchAll("SELECT * FROM `{$signtname}` WHERE (`date` BETWEEN ? AND ?) ORDER BY `date` ASC, `class` ASC, `course_id` ASC",[$begin,$end]);
+            if(!empty($class) && $class!=''){
+                $signres = \DB::fetchAll("SELECT * FROM `{$signtname}` WHERE (`date` BETWEEN ? AND ?) AND `class`=? ORDER BY `date` ASC, `class` ASC, `course_id` ASC",[$begin,$end,$class]);
+            }
+            else{
+                $signres = \DB::fetchAll("SELECT * FROM `{$signtname}` WHERE (`date` BETWEEN ? AND ?) ORDER BY `date` ASC, `class` ASC, `course_id` ASC",[$begin,$end]);
+            }
             if($signres === false){
                 $_E['template']['has_data'] = false;
                 throw new \Exception('取得點名單資料出問題');

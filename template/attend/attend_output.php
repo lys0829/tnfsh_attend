@@ -20,7 +20,7 @@ function output(){
         $("#message").html("請選擇日期");
         return ;
     }
-    location.assign("<?=$TnfshAttend->uri('attend','output')?>"+"?begin="+$("#date_begin").val()+"&end="+$("#date_end").val());
+    location.assign("<?=$TnfshAttend->uri('attend','output')?>"+"?begin="+$("#date_begin").val()+"&end="+$("#date_end").val()+"&class="+$("#class").val());
 }
 </script>
 
@@ -30,13 +30,17 @@ function output(){
         起始日期：
         <input type="date" id="date_begin" placeholder="">
 
-        <br>
+        <br><br>
 
         結束日期：
         <input type="date" id="date_end" placeholder="">
 
-        <br>
+        <br><br>
 
+        班級(可留白):
+        <input type="text" id="class">
+
+        <br><br>
         <button type="button" class="btn btn-success" onClick="output();">匯出</button>
         <div id="message" />
     <?php endif;?>
