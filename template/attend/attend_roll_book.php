@@ -108,9 +108,9 @@ function save(){
                                 <?php endif;?>
 
                                 <?php if(in_array($id,$tmpl["skip"])):?>
-                                    <button type="button" class="btn btn-danger" id="<?=$id?>_skip" onClick="update_state(<?=$id?>,2);">曠課</button>
+                                    <button type="button" class="btn btn-danger" id="<?=$id?>_skip" onClick="update_state(<?=$id?>,2);">缺席</button>
                                 <?php else:?>
-                                    <button type="button" class="btn" id="<?=$id?>_skip" onClick="update_state(<?=$id?>,2);">曠課</button>
+                                    <button type="button" class="btn" id="<?=$id?>_skip" onClick="update_state(<?=$id?>,2);">缺席</button>
                                 <?php endif;?>
 
                                 <?php if(in_array($id,$tmpl["late"])):?>
