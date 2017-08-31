@@ -10,7 +10,7 @@ if (!defined('IN_TEMPLATE')) {
 </div>
 
 <div>
-    <h4>目前僅開放教師當天補點名</h4>
+    <h4>開放補前一天的點名</h4>
     <h4>點名單修改期限為48小時</h4>
 </div>
 </center>

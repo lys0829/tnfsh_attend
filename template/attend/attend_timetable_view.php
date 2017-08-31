@@ -71,7 +71,7 @@ function view_roll_book(sign_id){
                         <?php for($d=0;$d<7;$d++){ ?>
                         <td <?php echo (date("Y-m-d", $tmpl['firstdate']+86400*$d) == $tmpl['date']?'class="info"':'class="hidden-xs"'); ?> align="center" style="width: 130px">
                         <?php if(!isset($tmpl['signed'][$cid][$d])):?>
-                            <?php if(date("Y-m-d", $tmpl['firstdate']+86400*$d) == $tmpl['date']):?>
+                            <?php if(date("Y-m-d", $tmpl['firstdate']+86400*$d) == $tmpl['date'] || date("Y-m-d", $tmpl['firstdate']+86400*($d+1)) == $tmpl['date']):?>
                                 <?php 
                                 $day = date("Y-m-d",$tmpl['firstdate']+86400*$d);
                                 $date = $day;
