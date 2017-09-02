@@ -37,31 +37,28 @@ $(document).ready(function()
         e.preventDefault();
 
         $("#display").html('...');
+        
+        B = BigNumber.random(40).mul(new BigNumber(10).pow(40)).ceil();
+        GB = PowMod(PublicG,B,PublicPrime);
+        GAB = PowMod(GA,B,PublicPrime);
+        $("#GB").val(GB.toString(10));
+        
+        keyhash = CryptoJS.MD5(GAB.toString(10));
+        key = CryptoJS.enc.Utf8.parse(keyhash);
+        iv  = CryptoJS.enc.Utf8.parse('<?=$tmpl['iv']?>');
+        msg = $("#passwordreal").val();
+        this.passwordreal.disabled = true;
+        encrypted = CryptoJS.AES.encrypt(msg,key,{
+                iv:iv,
+                mode:CryptoJS.mode.CBC,
+                padding:CryptoJS.pad.ZeroPadding});
+        $("#password").val(encrypted);
+        
         api_submit("<?=$TnfshAttend->uri('user','login')?>","#loginform","#display",function(res){
             location.href = "<?=$_E['SITEROOT']?>"+res.data;
-        },function(res){
-            B = BigNumber.random(40).mul(new BigNumber(10).pow(40)).ceil();
-            GB = PowMod(PublicG,B,PublicPrime);
-            GAB = PowMod(GA,B,PublicPrime);
-            $("#GB").val(GB.toString(10));
-            
-            keyhash = CryptoJS.MD5(GAB.toString(10));
-            key = CryptoJS.enc.Utf8.parse(keyhash);
-            iv  = CryptoJS.enc.Utf8.parse('<?=$tmpl['iv']?>');
-            msg = $("#passwordreal").val();
-            this.passwordreal.disabled = true;
-            encrypted = CryptoJS.AES.encrypt(msg,key,{
-                    iv:iv,
-                    mode:CryptoJS.mode.CBC,
-                    padding:CryptoJS.pad.ZeroPadding});
-            $("#password").val(encrypted);
-            
-            api_submit("<?=$TnfshAttend->uri('user','login')?>","#loginform","#display",function(res){
-                location.href = "<?=$_E['SITEROOT']?>"+res.data;
-            });
-            this.passwordreal.disabled = false;
-            return true;
         });
+        this.passwordreal.disabled = false;
+        return true;
     });
 });
 </script>
@@ -85,7 +82,7 @@ $(document).ready(function()
                     
                     <div class="form-group">
                     <label for="password" style = "display: block" class="login_lable_text">密碼</label>
-                    <input type="password" class="textinput" id="passwordreal" name="passwordreal" placeholder="Password" required>
+                    <input type="password" class="textinput" id="passwordreal" placeholder="Password" required>
                     </div>
                     
                     <br>

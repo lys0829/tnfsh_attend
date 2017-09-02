@@ -13,25 +13,8 @@ function loginHandle()
     }
 
     $username = \TnfshAttend\safe_post('username');
-    $passwd = \TnfshAttend\safe_post('passwordreal');
     $AESenpass = \TnfshAttend\safe_post('password');
     $GB = \TnfshAttend\safe_post('GB');
-
-    if( isset($username,$passwd) && $AESenpass==''){
-        if (!\userControl::CheckToken('LOGIN')) {
-            \TnfshAttend\throwjson('error', 'token error, please refresh page');
-        }
-
-		$user = login_with_tnfsh_email($username,$passwd);
-        if(!$user[0]){
-            \LOG::msg(\Level::Notice, "<$username> use email to login but fail.(".$user[1].')');
-            \TnfshAttend\throwjson('error','');
-        }
-
-        $user = $user[1];
-        \userControl::SetLoginToken($user['uid']);
-        \TnfshAttend\throwjson('SUCC', 'index.php');
-    }
 
     if( isset($username,$AESenpass,$GB) ) {
         if (!\userControl::CheckToken('LOGIN')) {
@@ -46,16 +29,25 @@ function loginHandle()
         $decode = openssl_decrypt($AESenpass,'aes-256-cbc',$key,OPENSSL_ZERO_PADDING,$iv);
         $password = rtrim($decode, "\0");
 
-        $user = login($username, $password);
-        if (!$user[0]) {
-            $_E['template']['alert'] = $user[1];
-            \LOG::msg(\Level::Notice, "<$username> want to login but fail.(".$user[1].')');
-            \TnfshAttend\throwjson('error', $user[1]);
-        } else {
-            $user = $user[1];
-            \userControl::SetLoginToken($user['uid']);
-            \TnfshAttend\throwjson('SUCC', 'index.php');
+        $user = login_with_tnfsh_email($username,$password);
+        if(!$user[0]){
+            /*\LOG::msg(\Level::Notice, "<$username> use email to login but fail.(".$user[1].')');
+            \TnfshAttend\throwjson('error','');*/
+            $user = login($username, $password);
+            if (!$user[0]) {
+                $_E['template']['alert'] = $user[1];
+                \LOG::msg(\Level::Notice, "<$username> want to login but fail.(".$user[1].')');
+                \TnfshAttend\throwjson('error', $user[1]);
+            } else {
+                $user = $user[1];
+                \userControl::SetLoginToken($user['uid']);
+                \TnfshAttend\throwjson('SUCC', 'index.php');
+            }
         }
+        $user = $user[1];
+        \userControl::SetLoginToken($user['uid']);
+        \TnfshAttend\throwjson('SUCC', 'index.php');
+
     }else{
         \userControl::RegisterToken('LOGIN', 600);
         $exkey = new \TnfshAttend\DiffieHellman();
