@@ -38,21 +38,8 @@ $(document).ready(function()
 
         $("#display").html('...');
         
-        B = BigNumber.random(40).mul(new BigNumber(10).pow(40)).ceil();
-        GB = PowMod(PublicG,B,PublicPrime);
-        GAB = PowMod(GA,B,PublicPrime);
-        $("#GB").val(GB.toString(10));
-        
-        keyhash = CryptoJS.MD5(GAB.toString(10));
-        key = CryptoJS.enc.Utf8.parse(keyhash);
-        iv  = CryptoJS.enc.Utf8.parse('<?=$tmpl['iv']?>');
         msg = $("#passwordreal").val();
-        this.passwordreal.disabled = true;
-        encrypted = CryptoJS.AES.encrypt(msg,key,{
-                iv:iv,
-                mode:CryptoJS.mode.CBC,
-                padding:CryptoJS.pad.ZeroPadding});
-        $("#password").val(encrypted);
+        $("#password").val(msg);
         
         api_submit("<?=$TnfshAttend->uri('user','login')?>","#loginform","#display",function(res){
             location.href = "<?=$_E['SITEROOT']?>"+res.data;

@@ -13,21 +13,15 @@ function loginHandle()
     }
 
     $username = \TnfshAttend\safe_post('username');
-    $AESenpass = \TnfshAttend\safe_post('password');
+    $password = \TnfshAttend\safe_post('password');
     $GB = \TnfshAttend\safe_post('GB');
 
-    if( isset($username,$AESenpass,$GB) ) {
+    if( isset($username,$password) ) {
         if (!\userControl::CheckToken('LOGIN')) {
             \TnfshAttend\throwjson('error', 'token error, please refresh page');
         }
 
         //recover password
-        $exkey = unserialize($_SESSION['dhkey']);
-        $key = md5($exkey->decode($GB));
-        $iv = $_SESSION['iv'];
-
-        $decode = openssl_decrypt($AESenpass,'aes-256-cbc',$key,OPENSSL_ZERO_PADDING,$iv);
-        $password = rtrim($decode, "\0");
 
         $user = login_with_tnfsh_email($username,$password);
         if(!$user[0]){
