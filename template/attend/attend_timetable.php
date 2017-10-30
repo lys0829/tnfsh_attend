@@ -72,7 +72,6 @@ if (!defined('IN_TEMPLATE')) {
             <div class="form-group">
                 <span class="form-group-addon">班級</span>
                 <select class="form-control" name="class" id="class_select">
-                    <option value="" id="chooseone">請選取一個</option>
                     <?php foreach ($_E['template']['clist'] as $cl) { ?>
                     <option value="<?=urlencode($cl)?>" id="class"><?=htmlentities($cl)?></option>
                     <?php }?>

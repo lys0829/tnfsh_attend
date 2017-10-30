@@ -11,7 +11,7 @@ function timetable_viewHandle(){
 
     if(empty($class)){
         $_E['template']['message'] = "請選擇班級";
-        \Render::renderSingleTemplate('common_message');
+        \Render::renderSingleTemplate('attend_timetable_list', 'attend');
         exit(0);
     }
 
