@@ -16,6 +16,8 @@ function apiHandle()
             break;
         case 'roll_book_save':
             break;
+        case 'roll_book_get':
+            break;
             
         default:
             \TnfshAttend\throwjson('error', 'Access denied');

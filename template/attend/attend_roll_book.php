@@ -5,6 +5,25 @@ if (!defined('IN_TEMPLATE')) {
 ?>
 
 <script>
+function get_roll_book_data(id){
+    $("#roll_book_get_signid").val(id);
+    api_submit('<?=$TnfshAttend->uri('attend','api','roll_book_get')?>',"#roll_book_get","#roll_book_get_message",function(res){
+       rb = JSON.parse(res['data']);
+       //console.log(rb);
+       skipg = rb['skip'];
+       lateg = rb['late'];
+       earlyg = rb['early'];
+       for(i=0;i<skipg.length;i++){
+           update_state(skipg[i],2);
+       }
+       for(i=0;i<lateg.length;i++){
+           update_state(lateg[i],1);
+       }
+       for(i=0;i<earlyg.length;i++){
+           update_state(earlyg[i],3);
+       }
+    });
+}
 function remove_people(arr) {
     var what, a = arguments, L = a.length, ax;
     while (L > 1 && arr.length) {
@@ -88,6 +107,9 @@ function goback(){
             <?php if(\userControl::has_permission('modify_roll_book_limit',$_G['uid']) || \userControl::has_permission('modify_roll_book',$_G['uid'])):?>
             <button type="button" class="btn btn-success" onClick="save();"><span class="glyphicon glyphicon-ok"></span>儲存</button>
             <button type="button" class="btn btn-primary" onClick="goback();">返回</button>
+                <?php if($tmpl['usid']!=-1):?>
+                <button type="button" class="btn btn-warning" onClick="get_roll_book_data(<?=$tmpl['usid']?>)">複製上節資料</button>
+                <?php endif;?>
             <?php endif;?>
             <div id="roll_book_save_message"></div>
         </div>
@@ -136,11 +158,15 @@ function goback(){
             <button type="button" class="btn btn-success" onClick="save();"><span class="glyphicon glyphicon-ok"></span>儲存</button>
             <?php endif;?>
             <div id="roll_book_save_message"></div>
+            <div id="roll_book_get_message"></div>
             <form role="form" action="attend.php" method="post" id="roll_book_save">
                 <input type="hidden" value="" name="sign_id" id="roll_book_save_signid">
                 <input type="hidden" value="" name="late" id="roll_book_save_late">
                 <input type="hidden" value="" name="skip" id="roll_book_save_skip">
                 <input type="hidden" value="" name="early" id="roll_book_save_early">
+            </form>
+            <form role="form" action="attend.php" method="post" id="roll_book_get">
+                <input type="hidden" value="" name="sign_id" id="roll_book_get_signid">
             </form>
         </div>
     </div>

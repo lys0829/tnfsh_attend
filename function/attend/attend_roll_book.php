@@ -40,6 +40,14 @@ function roll_bookHandle(){
             throw new \Exception('system error');
         }
 
+        $usid = -1;
+        if($stres['course_id']>1){
+            $usres = \DB::fetch("SELECT `sign_id` FROM {$stname} WHERE `class`=? AND `date`=? AND `course_id`=?",[$stres['class'],$stres['date'],$stres['course_id']-1]);
+            if($usres!==false){
+                $usid = $usres['sign_id'];
+            }
+        }
+
         $stnum = $clres["student"];
         $skip = json_decode($rbres["skip"]);
         $late = json_decode($rbres["late"]);
@@ -56,6 +64,7 @@ function roll_bookHandle(){
         $_E['template']['late_json'] = $rbres["late"];
         $_E['template']['early'] = $early;
         $_E['template']['early_json'] = $rbres["early"];
+        $_E['template']['usid'] = $usid;
         
         \Render::render('attend_roll_book', 'attend');
     }catch(\Exception $e){
