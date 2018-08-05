@@ -20,6 +20,8 @@ function AttendHandle()
             break;
         case 'roll_book':
             break;
+        case 'search':
+            break;
         case 'output':
             break;
 

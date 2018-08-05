@@ -42,7 +42,7 @@ function output(){
 
         <br><br>
         <button type="button" class="btn btn-success" onClick="output();">匯出</button>
-        <div id="message" />
+        <div id="message" /></div>
     <?php endif;?>
     </div>
 </div>

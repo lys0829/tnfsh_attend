@@ -70,7 +70,8 @@ $(document).ready(function()
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
                     <li><a href="<?=$TnfshAttend->uri('attend','timetable')?>">點名</a></li>
-                    <li><a href="<?=$TnfshAttend->uri('attend','output')?>">匯出點名單</a></li>
+                    <?php if(\userControl::has_permission('output',$_G['uid'])):?><li><a href="<?=$TnfshAttend->uri('attend','output')?>">匯出點名單</a></li><?php endif;?>
+                    <li><a href="<?=$TnfshAttend->uri('attend','search')?>">查詢</a></li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <?php if (!$_G['uid']): ?>
@@ -95,8 +96,7 @@ $(document).ready(function()
         <?php foreach ($_E['template']['error'] as $list) {
     ?>
             <li>(<?=$list['namespace']?>)<?=$list['msg']?></li>
-        <?php 
-}?>
+        <?php }?>
         </ul>
     </div>
     <?php endif; ?>
