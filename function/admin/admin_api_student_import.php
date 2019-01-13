@@ -24,13 +24,26 @@ function admin_api_student_importHandle()
         if($res === false)
             throw new \Exception('刪除舊資料失敗');
         
-        move_uploaded_file($file['tmp_name'],$_E['DATADIR'].'upload_student.csv');
-        //echo file_get_contents($_E['DATADIR'].'upload_student.csv');
-        $handle = fopen($_E['DATADIR'].'upload_student.csv',"r");
+        $path = $_E['DATADIR'].'upload_student.csv';
+        move_uploaded_file($file['tmp_name'],$path);
+
+        $filecon = file_get_contents($path);
+        $encoding = mb_detect_encoding($filecon);
+        if($encoding === false)
+            $filecon = iconv("BIG5", "UTF-8//IGNORE", $filecon);
+        else
+            $filecon = iconv($encoding, "UTF-8//IGNORE", $filecon);
+        
+        if (substr($filecon, 0, 3) == chr(239).chr(187).chr(191))
+            $filecon = substr($filecon, 3);
+        $res = file_put_contents($path, $filecon);
+        if($res===false)
+            throw new \Exception('轉換編碼時，檔案覆寫失敗');
+
+        $handle = fopen($path,"r");
         if(!$handle)
             throw new \Exception('開啟檔案失敗 '.$handle);
-        //\TnfshAttend\throwjson('error',$file['tmp_name']);
-        //\TnfshAttend\throwjson('error',file_get_contents($_E['DATADIR'].'upload_student.csv'));
+        
         $lid = -1;
         while ($data = fgetcsv($handle)) {
             $lid++;
@@ -41,7 +54,6 @@ function admin_api_student_importHandle()
             $data[0] = (int)$data[0];
             $data[1] = (int)$data[1];
             $data[2] = (int)$data[2];
-            $data[3] = mb_convert_encoding($data[3], "UTF-8", "auto");
             $res = \DB::query("INSERT INTO `{$tname}` (`student_id`,`class`,`number`,`name`)VALUES(?,?,?,?)",$data);
             if($res === false)
                 throw new \Exception('匯入失敗 第'.$lid.'列資料錯誤或資料庫問題');
