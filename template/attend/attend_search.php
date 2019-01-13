@@ -44,6 +44,9 @@ function search(){
                             <th width="125px">日期</th>
                             <th width="65px">班級</th>
                             <th width="65px">座號</th>
+                            <?php if(\userControl::has_permission('view_name',$_G['uid'])):?>
+                            <th width="80px">姓名</th>
+                            <?php endif;?>
                             <?php foreach($tmpl['timetable'] as $c){?>
                             <th width="70px"><?=$c['course_name']?></th>
                             <?php } ?>
@@ -55,6 +58,9 @@ function search(){
                             <td><?=$date?></td>
                             <td><?=$tmpl['class']?></td>
                             <td><?=$tmpl['num']?></td>
+                            <?php if(\userControl::has_permission('view_name',$_G['uid'])):?>
+                            <td><?=\TnfshAttend\StudentName($tmpl['class'],$tmpl['num'])?></td>
+                            <?php endif;?>
                             <?php foreach($tmpl['timetable'] as $c){?>
                             <td>
                                 <?php if(isset($data[$tmpl['class']][$tmpl['num']][$c['course_id']])):?>

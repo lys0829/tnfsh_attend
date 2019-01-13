@@ -20,6 +20,8 @@ function AdminHandle()
             break;
         case 'permission_manage':
             break;
+        case 'student_import':
+            break;
         case 'api':
             break;
 

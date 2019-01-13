@@ -1,6 +1,7 @@
 /config/config.php
 /LocalSetting.php
 /data/private/*.tmp
+/data
 tools.php
 .vscode
 /tools

@@ -81,6 +81,9 @@ $(document).ready(function()
                         <li><a href="<?=$TnfshAttend->uri('admin','group_list')?>" id="group">群組</a></li>
                         <li><a href="<?=$TnfshAttend->uri('admin','permission_list')?>" id="permission">權限</a></li>
                         <?php endif; ?>
+                        <?php if (\userControl::has_permission('manage_student',$_G['uid'])):?>
+                        <li><a href="<?=$TnfshAttend->uri('admin','student_import')?>" id="group">管理學生名單</a></li>
+                        <?php endif; ?>
                     <li><a href="<?=$TnfshAttend->uri('user','view',$_G['uid'])?>"><?php echo htmlspecialchars($_G['nickname']); ?></a></li>
                     <li><a href="<?=$TnfshAttend->uri('user','logout')?>">LOGOUT</a></li>
                     <?php endif; ?>

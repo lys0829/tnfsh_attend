@@ -118,6 +118,9 @@ function goback(){
                 <thead>
                     <tr>
                         <th>#</th>
+                        <?php if(\userControl::has_permission('view_name',$_G['uid'])):?>
+                        <th>姓名</th>
+                        <?php endif;?>
                         <th>出缺席狀況</th>
                     </tr>
                 </thead>
@@ -125,6 +128,9 @@ function goback(){
                     <?php for($id=1;$id<=$tmpl['stnum'];$id++){ ?>
                         <tr>
                             <td><?=$id?></td>
+                            <?php if(\userControl::has_permission('view_name',$_G['uid'])):?>
+                            <td><?=\TnfshAttend\StudentName($tmpl['class'],$id)?></td>
+                            <?php endif;?>
                             <td>
                                 <?php if(!in_array($id,$tmpl["skip"]) && !in_array($id,$tmpl["late"]) && !in_array($id,$tmpl["early"])):?>
                                     <button type="button" class="btn btn-success" id="<?=$id?>_attend"  onClick="update_state(<?=$id?>,0);">正常出席</button>

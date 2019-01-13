@@ -304,6 +304,19 @@ function nickname($uid)
     return $_E['nickname'];
 }
 
+function StudentName($class, $number)
+{
+    $class = (int)$class;
+    $number = (int)$number;
+
+    $tname = \DB::tname('students');
+    $res = \DB::fetch("SELECT `name` FROM `{$tname}` WHERE `class`=? AND `number`=?",[$class,$number]);
+    if($res === false) {
+        return "";
+    }
+    return $res["name"];
+}
+
 class privatedata
 {
     private $name = null;
