@@ -22,6 +22,8 @@ function AdminHandle()
             break;
         case 'student_import':
             break;
+        case 'student_list_sample':
+            break;
         case 'api':
             break;
 

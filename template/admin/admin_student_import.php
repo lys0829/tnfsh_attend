@@ -33,4 +33,7 @@ $(document).ready(function(){
             <span id="comment"></span>
         </form>
     </div>
+    <div class="row">
+        <a class="btn btn-info" href="<?=$TnfshAttend->uri('admin','student_list_sample')?>">下載範例檔</a>
+    </div>
 </div>
