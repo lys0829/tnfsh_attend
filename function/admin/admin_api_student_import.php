@@ -11,7 +11,7 @@ function admin_api_student_importHandle()
 
     try{
         $begin_line = (\TnfshAttend\safe_post("ignore_first"))?1:0;
-        if(!\userControl::has_permission('user_manage',$_G['uid'])){
+        if(!\userControl::has_permission('manage_student',$_G['uid'])){
             throw new \Exception('Access denied');
         }
         $tname = \DB::tname("students");
