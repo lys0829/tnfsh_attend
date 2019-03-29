@@ -3,6 +3,23 @@ if (!defined('IN_TnfshAttendSYSTEM')) {
     exit('Access denied');
 }
 
+function save_checkdata($s)
+{
+    $arr = json_decode($s);
+    if(!is_array($arr))
+    {
+        return false;
+    }
+    foreach($arr as $x)
+    {
+        if(!\TnfshAttend\check_tocint($x))
+        {
+            return false;
+        }
+    }
+    return true;
+}
+
 function attend_api_roll_book_saveHandle()
 {
     global $_G,$_E;
@@ -16,6 +33,10 @@ function attend_api_roll_book_saveHandle()
     $sign_id = \TnfshAttend\safe_post('sign_id');
 
     try{
+        if(!\TnfshAttend\check_tocint($sign_id) || !save_checkdata($late) || !save_checkdata($skip) || !save_checkdata($early))
+        {
+            throw new \Exception('儲存失敗');
+        }
         $stname = \DB::tname('signed');
         $res = \DB::fetch("SELECT * FROM `{$stname}` WHERE `sign_id`=? AND `uid`=?",[$sign_id,$_G['uid']]);
         if($res === false){
