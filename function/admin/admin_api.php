@@ -16,6 +16,8 @@ function apiHandle()
             break;
         case 'student_import':
             break;
+        case 'new_user':
+            break;
             
         default:
             \TnfshAttend\throwjson('error', 'Access denied');

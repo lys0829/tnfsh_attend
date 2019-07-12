@@ -80,6 +80,7 @@ $(document).ready(function()
                         <?php if (\userControl::has_permission('user_manage',$_G['uid'])):?>
                         <li><a href="<?=$TnfshAttend->uri('admin','group_list')?>" id="group">群組</a></li>
                         <li><a href="<?=$TnfshAttend->uri('admin','permission_list')?>" id="permission">權限</a></li>
+                        <li><a href="<?=$TnfshAttend->uri('admin','user_list')?>" id="users">使用者</a></li>
                         <?php endif; ?>
                         <?php if (\userControl::has_permission('manage_student',$_G['uid'])):?>
                         <li><a href="<?=$TnfshAttend->uri('admin','student_import')?>" id="group">管理學生名單</a></li>

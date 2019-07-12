@@ -16,11 +16,15 @@ function AdminHandle()
             break;
         case 'group_list':
             break;
+        case 'user_list':
+            break;
         case 'permission_list':
             break;
         case 'permission_manage':
             break;
         case 'student_import':
+            break;
+        case 'new_user':
             break;
         case 'student_list_sample':
             break;
