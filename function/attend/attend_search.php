@@ -14,6 +14,10 @@ function searchHandle()
     $num = (int)\TnfshAttend\safe_get('num');
 
     try{
+        if(!\userControl::has_permission("view_roll_book",$_G['uid'])){
+            throw new \Exception('您不具有權限');
+        }
+        
         if(empty($begin)||empty($end)||empty($class)||empty($num)){
             $_E['template']['has_data'] = false;
         }

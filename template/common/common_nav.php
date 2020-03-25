@@ -69,9 +69,9 @@ $(document).ready(function()
             </div>
             <div id="navbar" class="navbar-collapse collapse">
                 <ul class="nav navbar-nav">
-                    <li><a href="<?=$TnfshAttend->uri('attend','timetable')?>">點名</a></li>
+                    <?php if(\userControl::has_permission('attend',$_G['uid']) || \userControl::has_permission('view_roll_book',$_G['uid'])):?><li><a href="<?=$TnfshAttend->uri('attend','timetable')?>">點名</a></li><?php endif;?>
                     <?php if(\userControl::has_permission('output',$_G['uid'])):?><li><a href="<?=$TnfshAttend->uri('attend','output')?>">匯出點名單</a></li><?php endif;?>
-                    <li><a href="<?=$TnfshAttend->uri('attend','search')?>">查詢</a></li>
+                    <?php if(\userControl::has_permission('view_roll_book',$_G['uid'])):?><li><a href="<?=$TnfshAttend->uri('attend','search')?>">查詢</a></li><?php endif;?>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
                     <?php if (!$_G['uid']): ?>

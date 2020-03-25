@@ -10,6 +10,10 @@ function roll_bookHandle(){
     $sign_id = (int)\TnfshAttend\safe_get('sign_id');
 
     try{
+        if(!\userControl::has_permission("view_roll_book",$_G['uid'])){
+            throw new \Exception('您不具有權限');
+        }
+
         if(empty($sign_id)){
             throw new \Exception("尚未指定點名單");
         }
